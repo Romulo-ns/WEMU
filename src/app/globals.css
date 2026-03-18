@@ -1,0 +1,43 @@
+@import "tailwindcss";
+
+@theme {
+  --color-wemu-dark: #0a0a0f;
+  --color-wemu-darker: #050508;
+  --color-wemu-card: rgba(255, 255, 255, 0.05);
+  --color-wemu-border: rgba(255, 255, 255, 0.1);
+  --color-wemu-primary: #8b5cf6; /* Vibrant Purple */
+  --color-wemu-secondary: #ec4899; /* Vibrant Pink */
+  --color-spotify-green: #1DB954;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--color-wemu-dark)] text-white antialiased min-h-screen selection:bg-[var(--color-wemu-primary)] selection:text-white;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
+    background-attachment: fixed;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
+  }
+  
+  .glass-card {
+    @apply bg-[var(--color-wemu-card)] backdrop-blur-lg border border-[var(--color-wemu-border)] rounded-2xl shadow-2xl;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-[var(--color-wemu-primary)] to-[var(--color-wemu-secondary)];
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-[var(--color-wemu-primary)] to-[var(--color-wemu-secondary)] text-white shadow-lg hover:shadow-purple-500/50;
+  }
+
+  .btn-spotify {
+    @apply px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 active:scale-95 bg-[var(--color-spotify-green)] text-black shadow-lg hover:shadow-green-500/50 flex items-center gap-2;
+  }
+}
