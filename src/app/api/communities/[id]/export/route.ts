@@ -47,8 +47,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       },
       body: JSON.stringify({
         name: `WEMU: ${community.name}`,
-        description: `Exported from WEMU Community. A collection of ${community.tracks.length} tracks.`,
-        public: false
+        description: `Exported from WEMU Community. A collection of ${community.tracks.length} tracks.`
       })
     });
 
