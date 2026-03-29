@@ -158,13 +158,15 @@ export default function Navbar() {
                 <span className="text-sm font-medium text-gray-200 hidden sm:block">
                   Hello, {session.user?.name}
                 </span>
-                {session.user?.image ? (
-                  <img src={session.user.image} alt="Profile" className="h-10 w-10 rounded-full border-2 border-purple-500/50" />
-                ) : (
-                  <div className="h-10 w-10 rounded-full bg-purple-500/20 border-2 border-purple-500/50 flex items-center justify-center">
-                    <span className="font-bold text-white text-sm">{session.user?.name?.charAt(0) || "U"}</span>
-                  </div>
-                )}
+                <Link href="/profile" className="hover:scale-105 transition-transform" title="My Profile">
+                  {session.user?.image ? (
+                    <img src={session.user.image} alt="Profile" className="h-10 w-10 rounded-full border-2 border-purple-500/50 shadow-sm" />
+                  ) : (
+                    <div className="h-10 w-10 rounded-full bg-purple-500/20 border-2 border-purple-500/50 flex items-center justify-center shadow-sm">
+                      <span className="font-bold text-white text-sm">{session.user?.name?.charAt(0) || "U"}</span>
+                    </div>
+                  )}
+                </Link>
                 <button 
                   onClick={() => signOut()}
                   className="text-sm text-gray-300 hover:text-white transition-colors"
