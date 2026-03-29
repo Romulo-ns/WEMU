@@ -59,6 +59,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     });
 
     if (!addTracksRes.ok) {
+       console.error("Spotify add tracks error:", await addTracksRes.text());
        return NextResponse.json({ message: "Playlist created, but failed to add tracks" }, { status: 502 });
     }
 
