@@ -49,6 +49,9 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // 2. Add Tracks (Up to Spotify's limit of 100 per request. For MVP we slice at 100)
     const trackUris = community.tracks.slice(0, 100).map((t: any) => `spotify:track:${t.spotifyId}`);
 
+    // Workaround for Spotify API replication delay: Wait 1 second before modifying the newly created playlist
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: 'POST',
       headers: {
