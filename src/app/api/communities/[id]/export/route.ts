@@ -5,71 +5,126 @@ import dbConnect from "@/lib/db";
 import { Community } from "@/lib/models/Community";
 import { User } from "@/lib/models/User";
 
-export async function POST(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const { id } = await params;
+
     const session = await getServerSession(authOptions);
     const accessToken = (session as any)?.accessToken;
 
     if (!session || !accessToken) {
-      return NextResponse.json({ message: "Spotify not connected or unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Spotify not connected or unauthorized" },
+        { status: 401 }
+      );
     }
 
     await dbConnect();
+
     const user = await User.findById((session.user as any).id);
     if (!user || !user.spotifyId) {
-       return NextResponse.json({ message: "Spotify ID not found in database" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Spotify ID not found in database" },
+        { status: 400 }
+      );
     }
 
     const community = await Community.findById(id);
-    if (!community || community.tracks.length === 0) {
-      return NextResponse.json({ message: "Community not found or has no tracks" }, { status: 404 });
+    if (!community || !community.tracks || community.tracks.length === 0) {
+      return NextResponse.json(
+        { message: "Community not found or has no tracks" },
+        { status: 404 }
+      );
     }
 
-    // 1. Create Playlist on Spotify using the direct /me endpoint
+    const trackUris = community.tracks
+      .slice(0, 100)
+      .map((t: any) => t?.spotifyId)
+      .filter(Boolean)
+      .map((spotifyId: string) => `spotify:track:${spotifyId}`);
+
+    if (trackUris.length === 0) {
+      return NextResponse.json(
+        { message: "No valid Spotify track URIs found" },
+        { status: 400 }
+      );
+    }
+
     const createPlaylistRes = await fetch("https://api.spotify.com/v1/me/playlists", {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         name: `WEMU: ${community.name}`,
-        description: `Exported from WEMU Community. A collection of ${community.tracks.length} tracks.`
-      })
+        description: `Exported from WEMU Community. A collection of ${community.tracks.length} tracks.`,
+        public: false,
+      }),
+      cache: "no-store",
     });
+
+    const createText = await createPlaylistRes.text();
 
     if (!createPlaylistRes.ok) {
-      console.error("Spotify create playlist error:", await createPlaylistRes.text());
-      return NextResponse.json({ message: "Failed to create Spotify playlist. Is your token valid?" }, { status: 502 });
+      console.error("CREATE PLAYLIST ERROR:", createText);
+      return NextResponse.json(
+        {
+          message: "Failed to create playlist",
+          spotifyError: createText,
+        },
+        { status: 502 }
+      );
     }
 
-    const playlist = await createPlaylistRes.json();
+    const playlist = JSON.parse(createText);
 
-    // 2. Add Tracks (Up to Spotify's limit of 100 per request. For MVP we slice at 100)
-    const trackUris = community.tracks.slice(0, 100).map((t: any) => `spotify:track:${t.spotifyId}`);
+    const addTracksRes = await fetch(
+      `https://api.spotify.com/v1/playlists/${playlist.id}/items`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uris: trackUris,
+        }),
+        cache: "no-store",
+      }
+    );
 
-    // Workaround for Spotify API replication delay: Wait 1 second before modifying the newly created playlist
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ uris: trackUris })
-    });
+    const addText = await addTracksRes.text();
 
     if (!addTracksRes.ok) {
-       console.error("Spotify add tracks error:", await addTracksRes.text());
-       return NextResponse.json({ message: "Playlist created, but failed to add tracks" }, { status: 502 });
+      console.error("ADD TRACKS ERROR:", addText);
+      return NextResponse.json(
+        {
+          message: "Playlist created, but failed to add tracks",
+          playlistId: playlist.id,
+          spotifyError: addText,
+        },
+        { status: 502 }
+      );
     }
 
-    return NextResponse.json({ message: "Success", playlistUrl: playlist.external_urls.spotify }, { status: 200 });
-
+    return NextResponse.json(
+      {
+        message: "Success",
+        playlistUrl: playlist.external_urls?.spotify,
+        playlistId: playlist.id,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    console.error("Export error:", error);
-    return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    console.error("EXPORT ERROR:", error);
+
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
