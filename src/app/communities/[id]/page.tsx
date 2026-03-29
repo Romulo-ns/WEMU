@@ -4,6 +4,7 @@ import dbConnect from "@/lib/db";
 import { Community } from "@/lib/models/Community";
 import { User } from "@/lib/models/User";
 import SpotifySearch from "@/components/SpotifySearch";
+import ExportPlaylistButton from "@/components/ExportPlaylistButton";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -88,7 +89,12 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
           <div className="glass-card p-8 border border-white/10 shadow-xl">
             <h2 className="text-3xl font-bold mb-8 flex items-center justify-between">
               <span className="text-gradient">Shared Data Playlist</span>
-              <span className="text-sm bg-purple-500/20 text-purple-300 border border-purple-500/30 px-4 py-1.5 rounded-full uppercase tracking-wider">{community.tracks.length} Tracks</span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm bg-purple-500/20 text-purple-300 border border-purple-500/30 px-4 py-1.5 rounded-full uppercase tracking-wider">{community.tracks.length} Tracks</span>
+                {isAuthenticatedSpotify && isMember && (
+                  <ExportPlaylistButton communityId={community._id.toString()} trackCount={community.tracks.length} />
+                )}
+              </div>
             </h2>
             
             {community.tracks.length === 0 ? (
