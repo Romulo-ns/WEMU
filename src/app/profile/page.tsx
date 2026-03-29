@@ -99,10 +99,10 @@ export default async function ProfilePage() {
                 {topArtists.items.map((artist: any, i: number) => (
                   <div key={artist.id} className="flex items-center gap-6 p-4 rounded-2xl hover:bg-white/5 transition-all duration-300 group cursor-pointer border border-transparent hover:border-white/10">
                     <span className="text-2xl font-black text-gray-600 group-hover:text-purple-500 transition-colors w-6 text-right">{i + 1}</span>
-                    <img src={artist.images[0]?.url} alt={artist.name} className="w-16 h-16 rounded-full object-cover shadow-md group-hover:scale-110 transition-transform duration-500" />
+                    <img src={artist.images?.[0]?.url || 'https://via.placeholder.com/150'} alt={artist.name} className="w-16 h-16 rounded-full object-cover shadow-md group-hover:scale-110 transition-transform duration-500" />
                     <div className="flex-1">
                       <h3 className="text-lg font-bold text-white group-hover:text-purple-400 transition-colors">{artist.name}</h3>
-                      <p className="text-sm text-gray-400 capitalize mt-1">{artist.genres.slice(0, 2).join(" • ")}</p>
+                      <p className="text-sm text-gray-400 capitalize mt-1">{artist.genres?.slice(0, 2).join(" • ") || "Artist"}</p>
                     </div>
                   </div>
                 ))}
@@ -127,10 +127,10 @@ export default async function ProfilePage() {
                 {topTracks.items.map((track: any, i: number) => (
                   <div key={track.id} className="flex items-center gap-6 p-4 rounded-2xl hover:bg-white/5 transition-all duration-300 group cursor-pointer border border-transparent hover:border-white/10">
                      <span className="text-2xl font-black text-gray-600 group-hover:text-pink-500 transition-colors w-6 text-right">{i + 1}</span>
-                    <img src={track.album?.images[0]?.url} alt={track.name} className="w-16 h-16 rounded-xl object-cover shadow-md group-hover:rotate-3 transition-transform duration-300" />
+                    <img src={track.album?.images?.[0]?.url || 'https://via.placeholder.com/150'} alt={track.name} className="w-16 h-16 rounded-xl object-cover shadow-md group-hover:rotate-3 transition-transform duration-300" />
                     <div className="flex-1 overflow-hidden">
                       <h3 className="text-lg font-bold text-white group-hover:text-pink-400 transition-colors truncate">{track.name}</h3>
-                      <p className="text-sm text-gray-400 truncate mt-1">{track.artists.map((a:any) => a.name).join(", ")}</p>
+                      <p className="text-sm text-gray-400 truncate mt-1">{track.artists?.map((a:any) => a.name).join(", ") || "Unknown Artist"}</p>
                     </div>
                   </div>
                 ))}
