@@ -46,9 +46,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
 
     const playlist = await createPlaylistRes.json();
 
-    // Testing with a globally available track (Bohemian Rhapsody)
-    // to check if a specific track in the community is causing the 403 Forbidden
-    const trackUris = ["spotify:track:7tFiyTwD0nx5a1eklYtX2J"];
+    // 2. Add Tracks (Up to Spotify's limit of 100 per request. For MVP we slice at 100)
+    const trackUris = community.tracks.slice(0, 100).map((t: any) => `spotify:track:${t.spotifyId}`);
 
     const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: 'POST',
