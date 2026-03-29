@@ -45,10 +45,10 @@ export default function CreateCommunity() {
         <h1 className="text-4xl font-extrabold text-white mb-2">Start a New Sound</h1>
         <p className="text-lg text-gray-400">Create a space for people to share and discover music together.</p>
       </div>
-      
+
       <div className="glass-card p-10 border border-white/10 shadow-2xl">
         {error && <div className="mb-8 p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-center font-medium">{error}</div>}
-        
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-bold text-gray-300 mb-2">Community Name</label>
@@ -59,7 +59,7 @@ export default function CreateCommunity() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50 transition-all font-medium"
-              placeholder="e.g. 90s Synthwave Enjoyers"
+              placeholder="90s, Singing in the rain, Music for coding"
             />
           </div>
 
@@ -83,7 +83,7 @@ export default function CreateCommunity() {
               value={rules}
               onChange={(e) => setRules(e.target.value)}
               className="w-full bg-white/5 border border-white/10 rounded-xl py-4 px-5 text-white focus:outline-none focus:ring-2 focus:ring-pink-500/50 resize-none transition-all"
-              placeholder="e.g. 1. Be respectful&#10;2. Only post synthwave tracks"
+              placeholder="1. Be respectful&#10;2. Only post music with the same vibe."
             />
           </div>
 
