@@ -52,12 +52,13 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
     // Workaround for Spotify API replication delay: Wait 1 second before modifying the newly created playlist
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const urisQuery = encodeURIComponent(trackUris.join(","));
-    const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks?uris=${urisQuery}`, {
+    const addTracksRes = await fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${accessToken}`
-      }
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ uris: trackUris })
     });
 
     if (!addTracksRes.ok) {
