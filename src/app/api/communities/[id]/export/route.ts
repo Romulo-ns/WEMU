@@ -26,20 +26,8 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
       return NextResponse.json({ message: "Community not found or has no tracks" }, { status: 404 });
     }
 
-    const meRes = await fetch("https://api.spotify.com/v1/me", {
-      headers: { 'Authorization': `Bearer ${accessToken}` }
-    });
-    
-    if (!meRes.ok) {
-       console.error("Spotify /me error:", await meRes.text());
-       return NextResponse.json({ message: "Invalid Spotify token. Please login again." }, { status: 401 });
-    }
-    
-    const meData = await meRes.json();
-    const realSpotifyId = meData.id;
-
-    // 1. Create Playlist on Spotify
-    const createPlaylistRes = await fetch(`https://api.spotify.com/v1/users/${realSpotifyId}/playlists`, {
+    // 1. Create Playlist on Spotify using the direct /me endpoint
+    const createPlaylistRes = await fetch("https://api.spotify.com/v1/me/playlists", {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${accessToken}`,
