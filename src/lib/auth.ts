@@ -10,7 +10,7 @@ export const authOptions: NextAuthOptions = {
     SpotifyProvider({
       clientId: process.env.SPOTIFY_CLIENT_ID as string,
       clientSecret: process.env.SPOTIFY_CLIENT_SECRET as string,
-      authorization: { params: { scope: "user-read-email user-read-private user-top-read playlist-modify-public playlist-modify-private", show_dialog: "true" } },
+      authorization: "https://accounts.spotify.com/authorize?scope=user-read-email%20user-read-private%20user-top-read%20playlist-modify-public%20playlist-modify-private&show_dialog=true",
     }),
     CredentialsProvider({
       name: "Email and Password",
