@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${inter.variable} font-sans`}>
+      <body className={`${outfit.variable} ${inter.variable} font-sans`} suppressHydrationWarning>
         <SessionProviderWrapper>
           <Navbar />
           <main className="pt-20 pb-12">
