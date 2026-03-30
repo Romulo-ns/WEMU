@@ -9,11 +9,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "WEMU - Connect Through Music",
-  description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+  description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
   metadataBase: new URL("https://wemu-production.up.railway.app"),
   openGraph: {
     title: "WEMU - Connect Through Music",
-    description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+    description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
     url: "https://wemu-production.up.railway.app",
     siteName: "WEMU",
     images: [
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "WEMU - Connect Through Music",
-    description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+    description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
     images: ["/og-image.png"],
   },
 };
