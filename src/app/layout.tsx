@@ -9,7 +9,30 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "WEMU - Connect Through Music",
-  description: "A Spotify-integrated social network for music lovers.",
+  description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+  metadataBase: new URL("https://wemu-production.up.railway.app"),
+  openGraph: {
+    title: "WEMU - Connect Through Music",
+    description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+    url: "https://wemu-production.up.railway.app",
+    siteName: "WEMU",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "WEMU - The ultimate Social Network for music lovers",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "WEMU - Connect Through Music",
+    description: "The ultimate social network for music lovers. Discover, share, and connect through music on WEMU.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
