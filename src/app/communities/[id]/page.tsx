@@ -5,6 +5,7 @@ import { Community } from "@/lib/models/Community";
 import { User } from "@/lib/models/User";
 import SpotifySearch from "@/components/SpotifySearch";
 import ExportPlaylistButton from "@/components/ExportPlaylistButton";
+import CommunityWall from "@/components/CommunityWall";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -28,7 +29,7 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
 
   if (!community) return notFound();
 
-  const isMember = session?.user && community.members.some((m: any) => m._id.toString() === (session.user as any).id);
+  const isMember = !!(session?.user && community.members.some((m: any) => m._id.toString() === (session.user as any).id));
   const isAuthenticatedSpotify = !!(session as any)?.accessToken;
 
   return (
@@ -63,7 +64,7 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
               await Community.findByIdAndUpdate(id, { $pull: { members: userId } });
               revalidatePath(`/communities/${id}`);
             }}>
-              <button type="submit" className="bg-white/10 hover:bg-red-500/20 text-gray-300 hover:text-red-400 font-bold px-8 py-3 rounded-full border border-white/10 hover:border-red-500/30 transition-colors shadow-lg flex items-center gap-2">
+              <button type="submit" className="bg-white/10 hover:bg-red-500/20 text-gray-300 hover:text-red-400 font-bold px-8 py-3 rounded-full border border-white/10 hover:border-red-500/30 transition-colors shadow-lg flex items-center gap-2 text-sm">
                 Leave Community
               </button>
             </form>
@@ -78,7 +79,7 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
                {community.members.length} Member{community.members.length !== 1 && 's'}
              </span>
              <span className="bg-white/5 border border-white/5 px-5 py-2 rounded-full text-gray-400 text-sm font-medium">
-               Est. {new Date(community.createdAt).getFullYear()}
+                Est. {new Date(community.createdAt).getFullYear()}
              </span>
           </div>
         </div>
@@ -133,6 +134,8 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
               </div>
             )}
           </div>
+
+          <CommunityWall communityId={community._id.toString()} isMember={isMember} />
         </div>
 
         <div className="space-y-8">
