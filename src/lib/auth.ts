@@ -1,5 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import SpotifyProvider from "next-auth/providers/spotify";
+import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import dbConnect from "@/lib/db";
 import { User } from "@/lib/models/User";
@@ -17,6 +18,11 @@ export const authOptions: NextAuthOptions = {
           show_dialog: true,
         },
       },
+    }),
+
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }),
 
     CredentialsProvider({
@@ -54,26 +60,42 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account?.provider === "spotify") {
+      if (account?.provider === "spotify" || account?.provider === "google") {
         await dbConnect();
 
         let dbUser = await User.findOne({ email: user.email });
 
         if (!dbUser) {
+          // Create a new user if they don't exist
           dbUser = await User.create({
-            name: user.name || (profile as any)?.display_name || "Spotify User",
+            name: user.name || (profile as any)?.name || (profile as any)?.display_name || "New User",
             email: user.email || "",
-            image: user.image || "",
-            spotifyId: account.providerAccountId,
+            image: user.image || (profile as any)?.picture || "",
+            spotifyId: account.provider === "spotify" ? account.providerAccountId : undefined,
+            googleId: account.provider === "google" ? account.providerAccountId : undefined,
           });
         } else {
-          dbUser.spotifyId = account.providerAccountId;
-
-          if (!dbUser.image && user.image) {
-            dbUser.image = user.image;
+          // Update existing user with the new provider ID if they don't have it
+          let shouldSave = false;
+          
+          if (account.provider === "spotify" && !dbUser.spotifyId) {
+            dbUser.spotifyId = account.providerAccountId;
+            shouldSave = true;
+          }
+          
+          if (account.provider === "google" && !dbUser.googleId) {
+            dbUser.googleId = account.providerAccountId;
+            shouldSave = true;
           }
 
-          await dbUser.save();
+          if (!dbUser.image && (user.image || (profile as any)?.picture)) {
+            dbUser.image = user.image || (profile as any)?.picture;
+            shouldSave = true;
+          }
+
+          if (shouldSave) {
+            await dbUser.save();
+          }
         }
 
         user.id = dbUser._id.toString();
@@ -115,4 +137,4 @@ export const authOptions: NextAuthOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-};
+};
