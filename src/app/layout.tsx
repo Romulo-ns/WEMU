@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import SessionProviderWrapper from "@/components/SessionProviderWrapper";
 
 const outfit = Outfit({ subsets: ["latin"], variable: "--font-outfit" });
@@ -42,12 +43,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} ${inter.variable} font-sans`} suppressHydrationWarning>
+      <body className={`${outfit.variable} ${inter.variable} font-sans flex flex-col min-h-screen`} suppressHydrationWarning>
         <SessionProviderWrapper>
           <Navbar />
-          <main className="pt-20 pb-12">
+          <main className="pt-20 pb-12 flex-grow">
             {children}
           </main>
+          <Footer />
         </SessionProviderWrapper>
       </body>
     </html>
