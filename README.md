@@ -67,6 +67,7 @@ npm run db
 | `npm run start` | Start the production server |
 | `npm run lint` | Run ESLint |
 | `npm run db` | Start local database |
+| `npm run seed` | Seed local database with 10 test users |
 
 ---
 
