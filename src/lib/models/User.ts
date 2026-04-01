@@ -6,6 +6,7 @@ export interface IUser extends Document {
   image?: string;
   password?: string;
   spotifyId?: string;
+  googleId?: string;
   bio?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -16,8 +17,9 @@ const UserSchema: Schema<IUser> = new Schema(
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     image: { type: String },
-    password: { type: String }, // Optional for Spotify-only users
+    password: { type: String }, // Optional for OAuth users
     spotifyId: { type: String, sparse: true, unique: true },
+    googleId: { type: String, sparse: true, unique: true },
     bio: { type: String, default: "" },
   },
   {
