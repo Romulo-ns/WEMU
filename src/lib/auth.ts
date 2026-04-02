@@ -106,13 +106,13 @@ export const authOptions: NextAuthOptions = {
             shouldSave = true;
           }
 
-          // Só define imagem do provider se o usuário ainda não tiver imagem no banco
+          // Only set provider image if user doesn't have one
           if (!dbUser.image && providerImage) {
             dbUser.image = providerImage;
             shouldSave = true;
           }
 
-          // Só define nome se estiver vazio no banco
+          // Only set name if missing
           if (!dbUser.name && providerName) {
             dbUser.name = providerName;
             shouldSave = true;
@@ -123,7 +123,7 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
-        // Muito importante: usar SEMPRE os dados do banco
+        // Always use database values
         user.id = dbUser._id.toString();
         user.name = dbUser.name;
         user.email = dbUser.email;
