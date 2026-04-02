@@ -104,9 +104,15 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
       if (user) {
         token.id = user.id;
+        token.image = user.image;
+      }
+
+      if (trigger === "update" && session) {
+        if (session.image) token.image = session.image;
+        if (session.name) token.name = session.name;
       }
 
       if (account?.provider === "spotify") {
@@ -120,6 +126,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        session.user.image = token.image as string;
+        session.user.name = token.name as string;
         (session as any).accessToken = token.accessToken;
         (session as any).refreshToken = token.refreshToken;
       }

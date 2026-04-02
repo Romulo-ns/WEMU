@@ -32,7 +32,7 @@ interface CommunityItem {
 }
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const router = useRouter();
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [communitiesCreated, setCommunitiesCreated] = useState<CommunityItem[]>([]);
@@ -83,6 +83,13 @@ export default function ProfilePage() {
 
     const result = await res.json();
     setProfile((prev) => (prev ? { ...prev, ...result.user } : prev));
+    
+    // Update the session so the Navbar shows the new image/name
+    await update({
+      image: result.user.image,
+      name: result.user.name,
+    });
+
     setEditOpen(false);
   };
 
@@ -167,11 +174,10 @@ export default function ProfilePage() {
             {/* Badges */}
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
               <span
-                className={`px-5 py-2 rounded-full text-sm font-semibold border ${
-                  profile.spotifyId
+                className={`px-5 py-2 rounded-full text-sm font-semibold border ${profile.spotifyId
                     ? "bg-spotify-green/10 text-spotify-green border-spotify-green/30"
                     : "bg-white/10 text-white border-white/5"
-                }`}
+                  }`}
               >
                 {profile.spotifyId ? "🎧 Spotify Connected" : "✉️ Standard User"}
               </span>
@@ -211,7 +217,7 @@ export default function ProfilePage() {
               </h2>
               <span className="text-xs font-bold uppercase tracking-wider text-pink-400 bg-pink-500/10 px-4 py-1.5 rounded-full border border-pink-500/20">Recently Played</span>
             </div>
-            
+
             {spotifyStats.topArtists?.length > 0 ? (
               <div className="space-y-4">
                 {spotifyStats.topArtists.map((artist: any, i: number) => (
@@ -240,16 +246,16 @@ export default function ProfilePage() {
               </h2>
               <span className="text-xs font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-4 py-1.5 rounded-full border border-purple-500/20">On Repeat</span>
             </div>
-            
+
             {spotifyStats.topTracks?.length > 0 ? (
               <div className="space-y-4">
                 {spotifyStats.topTracks.map((track: any, i: number) => (
                   <div key={track.id} className="flex items-center gap-6 p-4 rounded-2xl hover:bg-white/5 transition-all duration-300 group cursor-pointer border border-transparent hover:border-white/10">
-                     <span className="text-2xl font-black text-gray-600 group-hover:text-pink-500 transition-colors w-6 text-right">{i + 1}</span>
+                    <span className="text-2xl font-black text-gray-600 group-hover:text-pink-500 transition-colors w-6 text-right">{i + 1}</span>
                     <img src={track.album?.images?.[0]?.url || 'https://via.placeholder.com/150'} alt={track.name} className="w-16 h-16 rounded-xl object-cover shadow-md group-hover:rotate-3 transition-transform duration-300" />
                     <div className="flex-1 overflow-hidden">
                       <h3 className="text-lg font-bold text-white group-hover:text-pink-400 transition-colors truncate">{track.name}</h3>
-                      <p className="text-sm text-gray-400 truncate mt-1">{track.artists?.map((a:any) => a.name).join(", ") || "Unknown Artist"}</p>
+                      <p className="text-sm text-gray-400 truncate mt-1">{track.artists?.map((a: any) => a.name).join(", ") || "Unknown Artist"}</p>
                     </div>
                   </div>
                 ))}
