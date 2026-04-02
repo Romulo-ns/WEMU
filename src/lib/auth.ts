@@ -39,11 +39,13 @@ export const authOptions: NextAuthOptions = {
         await dbConnect();
 
         const user = await User.findOne({ email: credentials.email });
+
         if (!user || !user.password) {
           throw new Error("Invalid email or password");
         }
 
         const isValid = await bcrypt.compare(credentials.password, user.password);
+
         if (!isValid) {
           throw new Error("Invalid email or password");
         }
@@ -63,33 +65,56 @@ export const authOptions: NextAuthOptions = {
       if (account?.provider === "spotify" || account?.provider === "google") {
         await dbConnect();
 
+        const providerImage =
+          user.image ||
+          (profile as any)?.picture ||
+          (profile as any)?.images?.[0]?.url ||
+          "";
+
+        const providerName =
+          user.name ||
+          (profile as any)?.name ||
+          (profile as any)?.display_name ||
+          "New User";
+
         let dbUser = await User.findOne({ email: user.email });
 
         if (!dbUser) {
-          // Create a new user if they don't exist
           dbUser = await User.create({
-            name: user.name || (profile as any)?.name || (profile as any)?.display_name || "New User",
+            name: providerName,
             email: user.email || "",
-            image: user.image || (profile as any)?.picture || "",
-            spotifyId: account.provider === "spotify" ? account.providerAccountId : undefined,
-            googleId: account.provider === "google" ? account.providerAccountId : undefined,
+            image: providerImage,
+            spotifyId:
+              account.provider === "spotify"
+                ? account.providerAccountId
+                : undefined,
+            googleId:
+              account.provider === "google"
+                ? account.providerAccountId
+                : undefined,
           });
         } else {
-          // Update existing user with the new provider ID if they don't have it
           let shouldSave = false;
-          
+
           if (account.provider === "spotify" && !dbUser.spotifyId) {
             dbUser.spotifyId = account.providerAccountId;
             shouldSave = true;
           }
-          
+
           if (account.provider === "google" && !dbUser.googleId) {
             dbUser.googleId = account.providerAccountId;
             shouldSave = true;
           }
 
-          if (!dbUser.image && (user.image || (profile as any)?.picture)) {
-            dbUser.image = user.image || (profile as any)?.picture;
+          // Only set provider image if user doesn't have one
+          if (!dbUser.image && providerImage) {
+            dbUser.image = providerImage;
+            shouldSave = true;
+          }
+
+          // Only set name if missing
+          if (!dbUser.name && providerName) {
+            dbUser.name = providerName;
             shouldSave = true;
           }
 
@@ -98,15 +123,27 @@ export const authOptions: NextAuthOptions = {
           }
         }
 
+        // Always use database values
         user.id = dbUser._id.toString();
+        user.name = dbUser.name;
+        user.email = dbUser.email;
+        user.image = dbUser.image;
       }
 
       return true;
     },
 
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
       if (user) {
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
+        token.image = user.image;
+      }
+
+      if (trigger === "update" && session) {
+        if (session.name) token.name = session.name;
+        if ((session as any).image) token.image = (session as any).image;
       }
 
       if (account?.provider === "spotify") {
@@ -120,6 +157,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).id = token.id;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
+        session.user.image = token.image as string;
         (session as any).accessToken = token.accessToken;
         (session as any).refreshToken = token.refreshToken;
       }
@@ -137,4 +177,4 @@ export const authOptions: NextAuthOptions = {
   },
 
   secret: process.env.NEXTAUTH_SECRET,
-};
+};

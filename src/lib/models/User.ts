@@ -8,6 +8,7 @@ export interface IUser extends Document {
   spotifyId?: string;
   googleId?: string;
   bio?: string;
+  tags?: string[];
   createdAt: Date;
   updatedAt: Date;
 }
@@ -20,7 +21,8 @@ const UserSchema: Schema<IUser> = new Schema(
     password: { type: String }, // Optional for OAuth users
     spotifyId: { type: String, sparse: true, unique: true },
     googleId: { type: String, sparse: true, unique: true },
-    bio: { type: String, default: "" },
+    bio: { type: String, default: "", maxlength: 160 },
+    tags: { type: [String], default: [] },
   },
   {
     timestamps: true,
