@@ -69,7 +69,7 @@ export default function ProfilePage() {
     }
   }, [status, router, fetchProfile]);
 
-  const handleSave = async (data: { bio: string; tags: string[]; image: string }) => {
+  const handleSave = async (data: { name: string; bio: string; tags: string[]; image: string }) => {
     const res = await fetch("/api/profile", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -289,6 +289,7 @@ export default function ProfilePage() {
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
         onSave={handleSave}
+        currentName={profile.name}
         currentBio={profile.bio}
         currentTags={profile.tags}
         currentImage={profile.image}

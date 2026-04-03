@@ -8,7 +8,8 @@ const UPLOAD_PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
 interface ProfileEditModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: { bio: string; tags: string[]; image: string }) => void;
+  onSave: (data: { name: string; bio: string; tags: string[]; image: string }) => void;
+  currentName: string;
   currentBio: string;
   currentTags: string[];
   currentImage: string;
@@ -19,11 +20,13 @@ export default function ProfileEditModal({
   isOpen,
   onClose,
   onSave,
+  currentName,
   currentBio,
   currentTags,
   currentImage,
   allowedTags,
 }: ProfileEditModalProps) {
+  const [name, setName] = useState(currentName);
   const [bio, setBio] = useState(currentBio);
   const [tags, setTags] = useState<string[]>(currentTags);
   const [image, setImage] = useState(currentImage);
@@ -85,6 +88,10 @@ export default function ProfileEditModal({
   };
 
   const handleSave = async () => {
+    if (name.trim().length < 2) {
+      setError("Name must be at least 2 characters long.");
+      return;
+    }
     if (bio.trim().length > 160) {
       setError("Bio must be 160 characters or less.");
       return;
@@ -92,7 +99,7 @@ export default function ProfileEditModal({
     setSaving(true);
     setError("");
     try {
-      await onSave({ bio: bio.trim(), tags, image });
+      await onSave({ name: name.trim(), bio: bio.trim(), tags, image });
     } catch {
       setError("Failed to save. Please try again.");
     } finally {
@@ -191,6 +198,21 @@ export default function ProfileEditModal({
                 onChange={handleImageUpload}
               />
             </div>
+          </div>
+
+          {/* Name Section */}
+          <div>
+            <label className="block text-sm font-bold text-gray-300 uppercase tracking-wider mb-3">
+              Display Name
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Your name"
+              maxLength={50}
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-transparent transition-all text-sm font-medium"
+            />
           </div>
 
           {/* Bio Section */}
