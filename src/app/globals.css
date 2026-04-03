@@ -5,15 +5,17 @@
   --color-wemu-darker: #050508;
   --color-wemu-card: rgba(255, 255, 255, 0.05);
   --color-wemu-border: rgba(255, 255, 255, 0.1);
-  --color-wemu-primary: #8b5cf6; /* Vibrant Purple */
-  --color-wemu-secondary: #ec4899; /* Vibrant Pink */
+  --color-wemu-primary: #8b5cf6;
+  /* Vibrant Purple */
+  --color-wemu-secondary: #ec4899;
+  /* Vibrant Pink */
   --color-spotify-green: #1DB954;
 }
 
 @layer base {
   body {
     @apply bg-[var(--color-wemu-dark)] text-white antialiased min-h-screen selection:bg-[var(--color-wemu-primary)] selection:text-white;
-    background-image: 
+    background-image:
       radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 25%),
       radial-gradient(circle at 85% 30%, rgba(236, 72, 153, 0.15), transparent 25%);
     background-attachment: fixed;
@@ -24,7 +26,7 @@
   .glass {
     @apply bg-white/5 backdrop-blur-md border border-white/10 shadow-xl;
   }
-  
+
   .glass-card {
     @apply bg-[var(--color-wemu-card)] backdrop-blur-lg border border-[var(--color-wemu-border)] rounded-2xl shadow-2xl;
   }
@@ -44,6 +46,7 @@
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
