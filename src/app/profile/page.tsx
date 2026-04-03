@@ -41,6 +41,7 @@ export default function ProfilePage() {
   const [allowedTags, setAllowedTags] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [editOpen, setEditOpen] = useState(false);
+  const [showEmail, setShowEmail] = useState(false);
 
   const fetchProfile = useCallback(async () => {
     try {
@@ -83,7 +84,7 @@ export default function ProfilePage() {
 
     const result = await res.json();
     setProfile((prev) => (prev ? { ...prev, ...result.user } : prev));
-    
+
     // Update the session so the Navbar shows the new image/name
     await update({
       image: result.user.image,
@@ -111,6 +112,8 @@ export default function ProfilePage() {
   }
 
   if (!profile) return null;
+
+  const maskedEmail = profile.email.replace(/(^.{2}).*(@.*$)/, "$1****$2");
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 animate-fade-in">
@@ -148,7 +151,63 @@ export default function ProfilePage() {
               </button>
             </div>
 
-            <p className="text-gray-400 text-lg mb-3">{profile.email}</p>
+            <div className="flex items-center justify-center md:justify-start gap-2 mb-3">
+              <p className="text-gray-400 text-lg">
+                {showEmail ? profile.email : maskedEmail}
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setShowEmail((prev) => !prev)}
+                className="p-1.5 rounded-full text-gray-400 hover:text-white hover:bg-white/10 transition"
+                aria-label={showEmail ? "Hide email" : "Show email"}
+                title={showEmail ? "Hide email" : "Show email"}
+              >
+                {showEmail ? (
+                  // Eye OFF (hidden)
+                  <svg
+                    className="w-[18px] h-[18px]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 3l18 18"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M10.584 10.587A3 3 0 0012 15a3 3 0 002.413-4.416M9.88 5.09A9.956 9.956 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.96 9.96 0 01-3.166 4.568M6.1 6.1A9.96 9.96 0 002.458 12c1.274 4.057 5.064 7 9.542 7 1.61 0 3.13-.31 4.516-.868"
+                    />
+                  </svg>
+                ) : (
+                  // Eye ON (visible)
+                  <svg
+                    className="w-[18px] h-[18px]"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M2.458 12C3.732 7.943 7.522 5 12 5s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7s-8.268-2.943-9.542-7z"
+                    />
+                  </svg>
+                )}
+              </button>
+            </div>
 
             {/* Bio */}
             {profile.bio && (
@@ -175,8 +234,8 @@ export default function ProfilePage() {
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
               <span
                 className={`px-5 py-2 rounded-full text-sm font-semibold border ${profile.spotifyId
-                    ? "bg-spotify-green/10 text-spotify-green border-spotify-green/30"
-                    : "bg-white/10 text-white border-white/5"
+                  ? "bg-spotify-green/10 text-spotify-green border-spotify-green/30"
+                  : "bg-white/10 text-white border-white/5"
                   }`}
               >
                 {profile.spotifyId ? "🎧 Spotify Connected" : "✉️ Standard User"}
