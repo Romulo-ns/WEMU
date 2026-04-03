@@ -92,7 +92,20 @@ export async function PUT(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { bio, tags, image } = body;
+  const { bio, tags, image, name } = body;
+
+  // Validate name
+  if (name !== undefined) {
+    if (typeof name !== "string") {
+      return NextResponse.json({ error: "Name must be a string" }, { status: 400 });
+    }
+    if (name.trim().length < 2) {
+      return NextResponse.json({ error: "Name must be at least 2 characters long" }, { status: 400 });
+    }
+    if (name.trim().length > 50) {
+      return NextResponse.json({ error: "Name must be 50 characters or less" }, { status: 400 });
+    }
+  }
 
   // Validate bio
   if (bio !== undefined) {
@@ -144,6 +157,7 @@ export async function PUT(req: NextRequest) {
   await dbConnect();
 
   const updateData: Record<string, unknown> = {};
+  if (name !== undefined) updateData.name = name.trim();
   if (bio !== undefined) updateData.bio = bio.trim();
   if (tags !== undefined) updateData.tags = tags.map((t: string) => t.toLowerCase().trim());
   if (image !== undefined) updateData.image = image;
