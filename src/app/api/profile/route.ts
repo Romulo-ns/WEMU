@@ -6,11 +6,13 @@ import { User } from "@/lib/models/User";
 import { Community } from "@/lib/models/Community";
 
 const ALLOWED_TAGS = [
-  "rock", "pop", "hip-hop", "r&b", "jazz", "blues", "metal", "punk", "indie",
-  "electronic", "edm", "house", "techno", "dubstep", "drum & bass",
+  "rock", "pop", "hip hop", "r&b", "jazz", "blues", "metal", "punk", "indie",
+  "electronic", "edm", "house", "techno", "dubstep", "drum and bass",
   "classical", "country", "folk", "reggae", "latin", "k-pop", "j-pop",
-  "soul", "funk", "gospel", "lo-fi", "ambient", "trap", "phonk", "mpb",
-  "samba", "bossa nova", "pagode", "sertanejo", "forró", "kizomba", "afrobeat"
+  "soul", "funk", "gospel", "lo-fi", "ambient", "trap", "phonk",
+  "afrobeat", "afrobeats", "dancehall", "grime",
+  "alternative", "progressive", "psychedelic",
+  "soundtrack", "instrumental", "acoustic"
 ];
 
 async function getSpotifyData(url: string, accessToken: string) {
