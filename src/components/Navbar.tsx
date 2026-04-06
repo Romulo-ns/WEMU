@@ -52,7 +52,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <div className="flex-shrink-0 flex items-center gap-8">
-            <Link href="/" className="text-3xl font-extrabold tracking-tighter text-gradient selection:bg-transparent">
+            <Link href="/" className="text-3xl font-extrabold tracking-tighter text-gradient selection:bg-transparent transition-all hover:scale-105">
               WEMU
             </Link>
             <div className="hidden lg:flex items-center gap-6">
@@ -67,7 +67,7 @@ export default function Navbar() {
             </div>
           </div>
           
-          <div className="hidden md:flex flex-1 mx-8">
+          <div className="hidden md:flex flex-1 mx-8 text-center">
             <div className="w-full max-w-md mx-auto relative z-50" ref={searchRef}>
               <div className="relative group">
                 <input 
@@ -95,7 +95,7 @@ export default function Navbar() {
               </div>
 
               {showDropdown && results && (
-                <div className="absolute top-12 left-0 w-full bg-[#1a1625] border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-fade-in max-h-[400px] overflow-y-auto custom-scrollbar">
+                <div className="absolute top-12 left-0 w-full bg-[#1a1625] border border-white/10 rounded-2xl shadow-2xl p-4 z-50 animate-fade-in max-h-[400px] overflow-y-auto custom-scrollbar text-left">
                   {results.communities.length === 0 && results.users.length === 0 ? (
                     <p className="text-gray-400 text-center text-sm py-4 font-medium">No results found.</p>
                   ) : (

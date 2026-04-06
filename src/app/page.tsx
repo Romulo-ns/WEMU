@@ -9,9 +9,12 @@ export default function Home() {
       <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-pink-600/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
 
       <div className="relative z-10 space-y-8 max-w-4xl glass-card p-12 mt-4 sm:mt-12">
-        <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight">
-          Connect Through <span className="text-gradient">Music</span>
+        <h1 className="text-7xl md:text-9xl font-black tracking-tighter mb-4 animate-fade-in drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
+          <span className="text-gradient">WEMU</span>
         </h1>
+        <h2 className="text-2xl md:text-4xl font-bold text-white tracking-tight mb-8">
+          Connect Through <span className="text-purple-400">Music</span>
+        </h2>
         
         <p className="text-xl text-gray-300 max-w-2xl mx-auto leading-relaxed">
           WEMU is the ultimate social network for music lovers. Share your favorite tracks, join niche communities, and discover new sounds with friends.
