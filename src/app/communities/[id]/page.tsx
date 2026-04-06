@@ -6,6 +6,7 @@ import { User } from "@/lib/models/User";
 import SpotifySearch from "@/components/SpotifySearch";
 import ExportPlaylistButton from "@/components/ExportPlaylistButton";
 import CommunityWall from "@/components/CommunityWall";
+import CommunityPlaylistPlayer from "@/components/CommunityPlaylistPlayer";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -98,41 +99,19 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
               </div>
             </h2>
             
-            {community.tracks.length === 0 ? (
-              <div className="h-64 flex flex-col items-center justify-center border-2 border-dashed border-white/10 rounded-2xl bg-white/5">
-                <svg className="w-16 h-16 text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
-                </svg>
-                <p className="text-gray-400 font-medium text-lg">The playlist is empty.</p>
-                <p className="text-gray-500 text-sm">Use the search panel to add your favorites!</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {community.tracks.sort((a:any, b:any) => b.addedAt - a.addedAt).map((track: any) => (
-                  <div key={track._id || track.spotifyId} className="flex items-center gap-5 p-4 rounded-2xl hover:bg-white/5 transition-all group border border-transparent hover:border-white/10 cursor-pointer">
-                    <div className="relative w-16 h-16 shrink-0 group-hover:scale-105 transition-transform duration-300">
-                       <img src={track.albumImageUrl || '/api/placeholder/400/400'} alt={track.name} className="w-full h-full rounded-xl shadow-lg object-cover" />
-                       <div className="absolute inset-0 bg-black/40 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
-                         <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                           <path d="M8 5v14l11-7z" />
-                         </svg>
-                       </div>
-                    </div>
-                    <div className="flex-1 overflow-hidden">
-                      <h3 className="text-lg font-bold text-white truncate group-hover:text-pink-400 transition-colors">{track.name}</h3>
-                      <p className="text-sm text-gray-400 truncate">{track.artist}</p>
-                    </div>
-                    <div className="hidden sm:flex flex-col items-end text-xs text-gray-500 gap-1 bg-black/20 p-2 rounded-lg">
-                      <span className="flex items-center gap-2">
-                        {track.addedBy?.image ? <img src={track.addedBy.image} className="w-4 h-4 rounded-full"/> : <div className="w-4 h-4 rounded-full bg-purple-500/50"></div>}
-                        {track.addedBy?.name || "Unknown"}
-                      </span>
-                      <span className="font-mono">{new Date(track.addedAt).toLocaleDateString()}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+            <CommunityPlaylistPlayer tracks={community.tracks.map((t: any) => ({
+              _id: t._id?.toString(),
+              spotifyId: t.spotifyId,
+              name: t.name,
+              artist: t.artist,
+              albumImageUrl: t.albumImageUrl,
+              addedBy: t.addedBy ? {
+                _id: t.addedBy._id?.toString(),
+                name: t.addedBy.name,
+                image: t.addedBy.image
+              } : undefined,
+              addedAt: t.addedAt.toISOString()
+            }))} />
           </div>
 
           <CommunityWall communityId={community._id.toString()} isMember={isMember} />
