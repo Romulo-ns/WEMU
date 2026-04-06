@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import { Community } from "@/lib/models/Community";
+import { User } from "@/lib/models/User";
 
 // GET all communities
 export async function GET() {
@@ -39,6 +40,12 @@ export async function POST(req: Request) {
     }
 
     const userId = (session.user as any).id;
+
+    // Check if user actually exists in the database
+    const userExists = await User.findById(userId);
+    if (!userExists) {
+      return NextResponse.json({ message: "User session is invalid or user was deleted" }, { status: 401 });
+    }
 
     const newCommunity = await Community.create({
       name,
