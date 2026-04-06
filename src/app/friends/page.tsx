@@ -86,11 +86,15 @@ export default async function FriendsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 animate-fade-in relative z-10">
-      <div className="absolute top-1/4 right-0 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+      {/* Background Decorations */}
+      <div className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+      <div className="absolute bottom-20 left-1/4 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
 
-      <div className="mb-8 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold text-gradient drop-shadow-sm mb-4">Your Network</h1>
-        <p className="text-gray-400">Manage your friends, discover new people, and see what they are up to.</p>
+      <div className="mb-16 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-8">
+        <div className="space-y-4">
+          <h1 className="text-5xl md:text-6xl font-black text-gradient tracking-tighter py-1">Your Network</h1>
+          <p className="text-gray-400 max-w-xl font-medium">Manage your connections, discover like-minded people, and stay tuned to the music they're exploring.</p>
+        </div>
       </div>
 
       <FriendsTabs 
