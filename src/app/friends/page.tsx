@@ -85,7 +85,7 @@ export default async function FriendsPage() {
   const mappedDiscover = await mapToNetworkUser(discoverUsers);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 animate-fade-in relative z-10">
+    <div className="max-w-7xl mx-auto px-4 py-12 animate-fade-in relative z-10 overflow-hidden">
       {/* Background Decorations */}
       <div className="absolute top-20 right-1/4 w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
       <div className="absolute bottom-20 left-1/4 w-[400px] h-[400px] bg-pink-600/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>

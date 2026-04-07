@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -34,6 +34,13 @@ export const metadata: Metadata = {
     description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
     images: ["/og-image.png"],
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5, // Allow some accessibility zoom but prevent auto-zoom out
+  userScalable: true,
 };
 
 export default function RootLayout({
