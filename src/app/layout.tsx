@@ -11,11 +11,11 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 export const metadata: Metadata = {
   title: "WEMU - Connect Through Music",
   description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
-  metadataBase: new URL("https://wemu-production.up.railway.app"),
+  metadataBase: new URL("https://wemu.up.railway.app"),
   openGraph: {
     title: "WEMU - Connect Through Music",
     description: "WEMU is the ultimate social network for music lovers worldwide. Discover new tracks, share your favorite playlists, and connect with a passionate community through the power of music.",
-    url: "https://wemu-production.up.railway.app",
+    url: "https://wemu.up.railway.app",
     siteName: "WEMU",
     images: [
       {
