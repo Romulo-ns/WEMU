@@ -7,6 +7,7 @@ import SpotifySearch from "@/components/SpotifySearch";
 import ExportPlaylistButton from "@/components/ExportPlaylistButton";
 import CommunityWall from "@/components/CommunityWall";
 import CommunityPlaylistPlayer from "@/components/CommunityPlaylistPlayer";
+import SpotifyLoginButton from "@/components/SpotifyLoginButton";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
@@ -129,10 +130,10 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
              {isAuthenticatedSpotify ? (
                <SpotifySearch communityId={community._id.toString()} accessToken={(session as any).accessToken} />
              ) : (
-               <div className="p-6 text-center border border-white/10 rounded-2xl bg-black/20">
-                 <p className="text-gray-400 mb-6 font-medium">You must be logged in with Spotify to add tracks directly to the community.</p>
-                 <button className="btn-spotify px-6 py-2 text-sm w-full justify-center">Link Spotify</button>
-               </div>
+                <div className="p-6 text-center border border-white/10 rounded-2xl bg-black/20">
+                  <p className="text-gray-400 mb-6 font-medium">You must be logged in with Spotify to add tracks directly to the community.</p>
+                  <SpotifyLoginButton />
+                </div>
              )}
           </div>
 
