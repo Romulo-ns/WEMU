@@ -1,6 +1,6 @@
 # WEMU
 
-> 🌐 **Live Site:** [https://wemu-production.up.railway.app/](https://wemu-production.up.railway.app/)
+> 🌐 **Live Site:** [https://wemu.up.railway.app/](https://wemu.up.railway.app/)
 
 WEMU is a full-stack web application built with **Next.js**, **React**, **TypeScript**, and **MongoDB**. It includes authentication via **NextAuth.js** and is deployed on **Railway**.
 
@@ -75,7 +75,7 @@ npm run db
 
 This project is deployed on **Railway**.
 
-👉 [https://wemu-production.up.railway.app/](https://wemu-production.up.railway.app/)
+👉 [https://wemu.up.railway.app/](https://wemu.up.railway.app/)
 
 ---
 
