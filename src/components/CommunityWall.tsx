@@ -141,7 +141,7 @@ export default function CommunityWall({ communityId, isMember }: CommunityWallPr
         ) : (
           messages.map((msg) => (
             <div key={msg._id} className="glass-card p-6 flex gap-4 hover:border-white/20 transition-all group">
-              <div className="shrink-0">
+              <Link href={`/profile/${msg.userId._id}`} className="shrink-0 group-hover:scale-105 transition-transform duration-300">
                 {msg.userId.image ? (
                   <img src={msg.userId.image} alt={msg.userId.name} className="w-12 h-12 rounded-full border-2 border-white/10" />
                 ) : (
@@ -149,12 +149,14 @@ export default function CommunityWall({ communityId, isMember }: CommunityWallPr
                     {msg.userId.name.charAt(0)}
                   </div>
                 )}
-              </div>
+              </Link>
               <div className="flex-1 space-y-2">
                 <div className="flex justify-between items-start">
-                  <h4 className="font-bold text-white group-hover:text-purple-400 transition-colors uppercase text-sm tracking-wide">
-                    {msg.userId.name}
-                  </h4>
+                  <Link href={`/profile/${msg.userId._id}`}>
+                    <h4 className="font-bold text-white group-hover:text-purple-400 transition-colors uppercase text-sm tracking-wide">
+                      {msg.userId.name}
+                    </h4>
+                  </Link>
                   <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">{formatTime(msg.createdAt)}</span>
                 </div>
                 <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">

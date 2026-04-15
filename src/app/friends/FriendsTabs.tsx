@@ -40,18 +40,20 @@ export default function FriendsTabs({
 
   const renderUserCard = (user: NetworkUser, actionType: "add" | "accept-reject" | "remove" | "cancel") => (
     <div key={user._id} className="glass-card p-6 flex flex-col items-center text-center gap-4 hover:-translate-y-2 transition-transform duration-300 border border-white/5 hover:border-white/20 animate-fade-in group">
-      <div className="relative">
+      <Link href={`/profile/${user._id}`} className="relative block group-hover:scale-105 transition-transform duration-300">
         {user.image ? (
           <img src={user.image} alt={user.name} className="w-24 h-24 rounded-full object-cover shadow-lg border-2 border-pink-500/30 group-hover:border-pink-500" />
         ) : (
-          <div className="w-24 h-24 rounded-full bg-purple-500/20 flex items-center justify-center text-3xl font-bold border-2 border-purple-500/30">
+          <div className="w-24 h-24 rounded-full bg-purple-500/20 flex items-center justify-center text-3xl font-bold border-2 border-purple-500/30 text-white">
             {user.name.charAt(0)}
           </div>
         )}
-      </div>
+      </Link>
       
       <div className="flex-1 w-full">
-        <h3 className="text-xl font-bold text-white max-w-full truncate group-hover:text-pink-400 transition-colors uppercase tracking-tight">{user.name}</h3>
+        <Link href={`/profile/${user._id}`}>
+          <h3 className="text-xl font-bold text-white max-w-full truncate group-hover:text-pink-400 transition-colors uppercase tracking-tight">{user.name}</h3>
+        </Link>
         <p className="text-sm text-gray-400 mt-1 line-clamp-2 min-h-[40px] px-2">{user.bio || "No bio available."}</p>
       </div>
 

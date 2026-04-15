@@ -3,6 +3,7 @@ import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/db";
 import { Community } from "@/lib/models/Community";
 import { User } from "@/lib/models/User";
+import Link from "next/link";
 import SpotifySearch from "@/components/SpotifySearch";
 import ExportPlaylistButton from "@/components/ExportPlaylistButton";
 import CommunityWall from "@/components/CommunityWall";
@@ -43,7 +44,9 @@ export default async function CommunityDetailsPage({ params }: { params: Promise
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-6">
           <div className="flex-1">
             <h1 className="text-4xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-2">{community.name}</h1>
-            <p className="text-gray-400">Created by {(community.creatorId as any)?.name || "Unknown"}</p>
+            <p className="text-gray-400">
+              Created by <Link href={`/profile/${(community.creatorId as any)?._id}`} className="text-purple-400 hover:text-purple-300 font-bold underline transition-colors">{(community.creatorId as any)?.name || "Unknown"}</Link>
+            </p>
           </div>
           
           {!isMember && session?.user ? (

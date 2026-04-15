@@ -127,7 +127,7 @@ export default function Navbar() {
                             <div className="space-y-1">
                               {results.users.map((u: any) => (
                                 <Link 
-                                  href="#"
+                                  href={`/profile/${u._id}`}
                                   key={u._id}
                                   onClick={() => setShowDropdown(false)}
                                   className="flex items-center gap-3 p-2 hover:bg-white/10 rounded-xl transition-colors cursor-pointer"
